@@ -1,0 +1,48 @@
+{
+  "name": "@judsirera/slider-gallery",
+  "version": "1.0.0",
+  "description": "An interactive slider gallery",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf dist && NODE_ENV=production babel src --out-dir dist --copy-files"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/judithsirera/slider-gallery.git"
+  },
+  "keywords": [
+    "gallery",
+    "slider"
+  ],
+  "author": "Judith Sirera i Pulido",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/judithsirera/slider-gallery/issues"
+  },
+  "homepage": "https://github.com/judithsirera/slider-gallery#readme",
+  "directories": {
+    "test": "test"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "sass": "^1.43.3"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-react": "^7.14.5",
+    "classnames": "^2.3.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.8",
+    "@babel/preset-env": "^7.15.8"
+  }
+}
