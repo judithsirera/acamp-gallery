@@ -17,6 +17,10 @@ var _classnames = _interopRequireDefault(require("classnames"));
 
 var _indexModule = _interopRequireDefault(require("./index.module.scss"));
 
+var _arrows = require("./utils/arrows");
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -108,7 +112,7 @@ class GallerySlider extends _react.default.PureComponent {
           isTransitioning: false
         });
         console.log('stop transition');
-      }, 500);
+      }, 1000);
     });
   }
 
@@ -131,13 +135,9 @@ class GallerySlider extends _react.default.PureComponent {
     } = this.state;
 
     if (prevProps !== this.props) {
-      if (prevProps.images.length !== this.props.images.length) {
-        this.forceUpdate();
-      } else {
-        this.calculateActiveWidth(() => {
-          this.calculateOffset();
-        });
-      }
+      this.calculateActiveWidth(() => {
+        this.calculateOffset();
+      });
     } else if (prevState.activeImage != activeImage) {
       this.calculateOffset();
     }
@@ -260,7 +260,8 @@ class GallerySlider extends _react.default.PureComponent {
       loaderElement,
       height,
       columnWidth,
-      className
+      className,
+      navigation
     } = this.props;
     const swipeHandlers = {
       onPointerDown: this.handleStartSwipe,
@@ -271,16 +272,28 @@ class GallerySlider extends _react.default.PureComponent {
     const hasMoreThanOneImage = images.length > 1;
     const firstImage = images[0];
     const lastImage = images[images.length - 1];
+    let showNavigation = navigation !== false;
+
+    if (showNavigation && !hasMoreThanOneImage) {
+      showNavigation = navigation === null || navigation === void 0 ? void 0 : navigation.showWhenOneImageOrLess;
+    }
+
+    console.log(navigation, showNavigation);
+    if (images.length === 0) return null;
     return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, loading !== null && loading !== void 0 ? loading : loaderElement, /*#__PURE__*/_react.default.createElement("div", {
-      className: (0, _classnames.default)(className, _indexModule.default.galleryWrapper, loading && _indexModule.default.hidden),
+      className: (0, _classnames.default)(_indexModule.default.gallerySlider, className)
+    }, /*#__PURE__*/_react.default.createElement("div", {
+      className: (0, _classnames.default)(_indexModule.default.galleryWrapper, loading && _indexModule.default.hidden),
       style: {
         height: "".concat(height, "px")
       }
-    }, hasMoreThanOneImage && /*#__PURE__*/_react.default.createElement("div", {
-      className: (0, _classnames.default)(_indexModule.default.navigationButton),
-      onClick: () => this.updateActiveImage(activeImage - 1),
-      disabled: activeImage === 0
-    }), /*#__PURE__*/_react.default.createElement("div", _extends({
+    }, showNavigation && /*#__PURE__*/_react.default.createElement("div", {
+      className: (0, _classnames.default)(_indexModule.default.navigationButton, navigation.className, activeImage === 0 && _indexModule.default.disabled),
+      onClick: () => this.updateActiveImage(activeImage - 1)
+    }, /*#__PURE__*/_react.default.createElement(_arrows.ArrowLeft, {
+      width: 24,
+      height: 24
+    })), /*#__PURE__*/_react.default.createElement("div", _extends({
       className: _indexModule.default.imagesContainer,
       ref: this.imagesContainerRef,
       style: {
@@ -293,14 +306,16 @@ class GallerySlider extends _react.default.PureComponent {
         width: columnWidth,
         bgOffset: '75%'
       })
-    }), this.getSideColumns(lastImage, true)), hasMoreThanOneImage && /*#__PURE__*/_react.default.createElement("div", {
-      className: (0, _classnames.default)(_indexModule.default.navigationButton),
+    }), this.getSideColumns(lastImage, true)), showNavigation && /*#__PURE__*/_react.default.createElement("div", {
+      className: (0, _classnames.default)(_indexModule.default.navigationButton, navigation.className, activeImage === images.length - 1 && _indexModule.default.disabled),
       style: {
         marginLeft: 16
       },
-      onClick: () => this.updateActiveImage(activeImage + 1),
-      disabled: activeImage === images.length - 1
-    })));
+      onClick: () => this.updateActiveImage(activeImage + 1)
+    }, /*#__PURE__*/_react.default.createElement(_arrows.ArrowRight, {
+      width: 24,
+      height: 24
+    })))));
   }
 
 }
@@ -313,10 +328,25 @@ GallerySlider.defaultProps = {
   columnWidth: 75,
   sideColumns: 2,
   containImage: 'off',
-  activeOnHover: false
+  activeOnHover: false,
+  navigation: true
 };
 GallerySlider.CONTAIN = 'contain';
 GallerySlider.CONTAIN_ACTIVE_IMAGE = 'contain_active';
 GallerySlider.CONTAIN_OFF = 'off';
+GallerySlider.propTypes = {
+  images: _propTypes.default.arrayOf(_propTypes.default.string).isRequired,
+  height: _propTypes.default.number,
+  initialImage: _propTypes.default.number,
+  columnGutter: _propTypes.default.number,
+  columnWidth: _propTypes.default.number,
+  sideColumns: _propTypes.default.number,
+  containImage: _propTypes.default.oneOf([GallerySlider.CONTAIN, GallerySlider.CONTAIN_ACTIVE_IMAGE, GallerySlider.CONTAIN_OFF]),
+  activeOnHover: _propTypes.default.bool,
+  navigation: _propTypes.default.oneOfType([_propTypes.default.bool, _propTypes.default.shape({
+    className: _propTypes.default.string,
+    showWhenOneImageOrLess: _propTypes.default.bool
+  })])
+};
 var _default = GallerySlider;
 exports.default = _default;

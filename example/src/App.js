@@ -7,7 +7,7 @@ const InputField = ({ label, ...inputProps }) => {
   return (
     <div className='input-field'>
       <label className='input-field-label'>{label}</label>
-      <input {...inputProps} min={0} />
+      <input min={0} {...inputProps} />
     </div>
   );
 };
@@ -41,6 +41,7 @@ const App = () => {
   const [height, setHeight] = useState(460);
   const [containImage, setContainImage] = useState(GallerySlider.CONTAIN_OFF);
   const [activeOnHover, setActiveOnHover] = useState(false);
+  const [navigation, setNavigation] = useState(true);
 
   return (
     <div className='app'>
@@ -64,6 +65,7 @@ const App = () => {
         sideColumns={sideColumns}
         containImage={containImage}
         activeOnHover={activeOnHover}
+        navigation={navigation}
         className='gallery-slider'
       />
       <div className='input-container'>
@@ -72,6 +74,7 @@ const App = () => {
           label='Number of images'
           type='number'
           value={images}
+          min={1}
           onChange={(event) => setImages(parseInt(event.target.value))}
         />
         <InputField
@@ -116,6 +119,25 @@ const App = () => {
           checked={activeOnHover}
           onChange={() => setActiveOnHover(!activeOnHover)}
         />
+        <InputField
+          label='Navigation'
+          type='checkbox'
+          checked={navigation}
+          onChange={() => setNavigation(!navigation)}
+        />
+        {navigation && (
+          <>
+            <h4>Navigation parameters</h4>
+            <InputField
+              label='Show navigation when one image or less'
+              type='checkbox'
+              checked={navigation?.showWhenOneImageOrLess}
+              onChange={() =>
+                setNavigation({ showWhenOneImageOrLess: !navigation?.showWhenOneImageOrLess })
+              }
+            />
+          </>
+        )}
       </div>
     </div>
   );

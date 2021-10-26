@@ -1,6 +1,8 @@
 import React, { createRef } from 'react';
 import classNames from 'classnames';
 import styles from './index.module.scss';
+import { ArrowLeft, ArrowRight } from './utils/arrows';
+import PropTypes from 'prop-types';
 
 const SWIPER_MIN_DISTANCE = 50;
 
@@ -73,13 +75,9 @@ class GallerySlider extends React.PureComponent {
   componentDidUpdate(prevProps, prevState) {
     const { activeImage } = this.state;
     if (prevProps !== this.props) {
-      if (prevProps.images.length !== this.props.images.length) {
-        this.forceUpdate();
-      } else {
-        this.calculateActiveWidth(() => {
-          this.calculateOffset();
-        });
-      }
+      this.calculateActiveWidth(() => {
+        this.calculateOffset();
+      });
     } else if (prevState.activeImage != activeImage) {
       this.calculateOffset();
     }
@@ -178,7 +176,7 @@ class GallerySlider extends React.PureComponent {
 
   render() {
     const { loading, activeImage } = this.state;
-    const { images, loaderElement, height, columnWidth, className } = this.props;
+    const { images, loaderElement, height, columnWidth, className, navigation } = this.props;
 
     const swipeHandlers = {
       onPointerDown: this.handleStartSwipe,
@@ -191,42 +189,62 @@ class GallerySlider extends React.PureComponent {
     const firstImage = images[0];
     const lastImage = images[images.length - 1];
 
+    let showNavigation = navigation !== false;
+    if (showNavigation && !hasMoreThanOneImage) {
+      showNavigation = navigation?.showWhenOneImageOrLess;
+    }
+
+    if (images.length === 0) return null;
     return (
       <>
         {loading ?? loaderElement}
-        <div
-          className={classNames(className, styles.galleryWrapper, loading && styles.hidden)}
-          style={{ height: `${height}px` }}>
-          {hasMoreThanOneImage && (
-            <div
-              className={classNames(styles.navigationButton)}
-              onClick={() => this.updateActiveImage(activeImage - 1)}
-              disabled={activeImage === 0}
-            />
-          )}
+        <div className={classNames(styles.gallerySlider, className)}>
           <div
-            className={styles.imagesContainer}
-            ref={this.imagesContainerRef}
-            style={{
-              marginLeft: hasMoreThanOneImage ? 16 : null
-            }}
-            {...swipeHandlers}>
-            {this.getSideColumns(firstImage)}
-            {images.map(this.getImages)}
+            className={classNames(styles.galleryWrapper, loading && styles.hidden)}
+            style={{ height: `${height}px` }}>
+            {showNavigation && (
+              <div
+                className={classNames(
+                  styles.navigationButton,
+                  navigation.className,
+                  activeImage === 0 && styles.disabled
+                )}
+                onClick={() => this.updateActiveImage(activeImage - 1)}>
+                <ArrowLeft width={24} height={24} />
+              </div>
+            )}
             <div
-              className={classNames(styles.galleryImage, styles.disabled)}
-              style={this.getImagesStyles({ src: lastImage, width: columnWidth, bgOffset: '75%' })}
-            />
-            {this.getSideColumns(lastImage, true)}
+              className={styles.imagesContainer}
+              ref={this.imagesContainerRef}
+              style={{
+                marginLeft: showNavigation ? 16 : null
+              }}
+              {...swipeHandlers}>
+              {this.getSideColumns(firstImage)}
+              {images.map(this.getImages)}
+              <div
+                className={classNames(styles.galleryImage, styles.disabled)}
+                style={this.getImagesStyles({
+                  src: lastImage,
+                  width: columnWidth,
+                  bgOffset: '75%'
+                })}
+              />
+              {this.getSideColumns(lastImage, true)}
+            </div>
+            {showNavigation && (
+              <div
+                className={classNames(
+                  styles.navigationButton,
+                  navigation.className,
+                  activeImage === images.length - 1 && styles.disabled
+                )}
+                style={{ marginLeft: 16 }}
+                onClick={() => this.updateActiveImage(activeImage + 1)}>
+                <ArrowRight width={24} height={24} />
+              </div>
+            )}
           </div>
-          {hasMoreThanOneImage && (
-            <div
-              className={classNames(styles.navigationButton)}
-              style={{ marginLeft: 16 }}
-              onClick={() => this.updateActiveImage(activeImage + 1)}
-              disabled={activeImage === images.length - 1}
-            />
-          )}
         </div>
       </>
     );
@@ -241,11 +259,34 @@ GallerySlider.defaultProps = {
   columnWidth: 75,
   sideColumns: 2,
   containImage: 'off',
-  activeOnHover: false
+  activeOnHover: false,
+  navigation: true
 };
 
 GallerySlider.CONTAIN = 'contain';
 GallerySlider.CONTAIN_ACTIVE_IMAGE = 'contain_active';
 GallerySlider.CONTAIN_OFF = 'off';
+
+GallerySlider.propTypes = {
+  images: PropTypes.arrayOf(PropTypes.string).isRequired,
+  height: PropTypes.number,
+  initialImage: PropTypes.number,
+  columnGutter: PropTypes.number,
+  columnWidth: PropTypes.number,
+  sideColumns: PropTypes.number,
+  containImage: PropTypes.oneOf([
+    GallerySlider.CONTAIN,
+    GallerySlider.CONTAIN_ACTIVE_IMAGE,
+    GallerySlider.CONTAIN_OFF
+  ]),
+  activeOnHover: PropTypes.bool,
+  navigation: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.shape({
+      className: PropTypes.string,
+      showWhenOneImageOrLess: PropTypes.bool
+    })
+  ])
+};
 
 export default GallerySlider;
