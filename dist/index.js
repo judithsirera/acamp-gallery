@@ -278,7 +278,6 @@ class GallerySlider extends _react.default.PureComponent {
       showNavigation = navigation === null || navigation === void 0 ? void 0 : navigation.showWhenOneImageOrLess;
     }
 
-    console.log(navigation, showNavigation);
     if (images.length === 0) return null;
     return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, loading !== null && loading !== void 0 ? loading : loaderElement, /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(_indexModule.default.gallerySlider, className)
@@ -297,7 +296,7 @@ class GallerySlider extends _react.default.PureComponent {
       className: _indexModule.default.imagesContainer,
       ref: this.imagesContainerRef,
       style: {
-        marginLeft: hasMoreThanOneImage ? 16 : null
+        marginLeft: showNavigation ? 16 : null
       }
     }, swipeHandlers), this.getSideColumns(firstImage), images.map(this.getImages), /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(_indexModule.default.galleryImage, _indexModule.default.disabled),

@@ -46,7 +46,7 @@ const App = () => {
   return (
     <div className='app'>
       <h1>Slider Gallery</h1>
-      <h3>An interactive gallery</h3>
+      <h3>A new gallery for your pages!</h3>
       <p>
         By{' '}
         <a href='http://judithsirera.com/' target='_blank' rel='noreferrer'>
