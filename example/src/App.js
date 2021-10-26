@@ -40,6 +40,7 @@ const App = () => {
   const [columnWidth, setColumnWidth] = useState(75);
   const [height, setHeight] = useState(460);
   const [containImage, setContainImage] = useState(GallerySlider.CONTAIN_OFF);
+  const [activeOnHover, setActiveOnHover] = useState(false);
 
   return (
     <div className='app'>
@@ -62,6 +63,7 @@ const App = () => {
         columnWidth={columnWidth}
         sideColumns={sideColumns}
         containImage={containImage}
+        activeOnHover={activeOnHover}
         className='gallery-slider'
       />
       <div className='input-container'>
@@ -107,6 +109,12 @@ const App = () => {
           onChange={(event) => {
             setContainImage(CONTAIN_OPTIONS[event.target.selectedIndex]);
           }}
+        />
+        <InputField
+          label='Active on hover'
+          type='checkbox'
+          checked={activeOnHover}
+          onChange={() => setActiveOnHover(!activeOnHover)}
         />
       </div>
     </div>

@@ -6,6 +6,7 @@ const SWIPER_MIN_DISTANCE = 50;
 
 class GallerySlider extends React.PureComponent {
   swipeStart = 0;
+  transition = null;
 
   constructor(props, context) {
     super(props, context);
@@ -14,7 +15,8 @@ class GallerySlider extends React.PureComponent {
       loading: true,
       activeWidth: 500,
       activeImage: props.initialImage,
-      offsetLeft: 0
+      offsetLeft: 0,
+      isTransitioning: false
     };
 
     this.calculateOffset = this.calculateOffset.bind(this);
@@ -23,6 +25,7 @@ class GallerySlider extends React.PureComponent {
     this.getImagesStyles = this.getImagesStyles.bind(this);
     this.handleEndSwipe = this.handleEndSwipe.bind(this);
     this.handleStartSwipe = this.handleStartSwipe.bind(this);
+    this.updateActiveImage = this.updateActiveImage.bind(this);
   }
 
   calculateActiveWidth(callback = () => {}) {
@@ -40,11 +43,31 @@ class GallerySlider extends React.PureComponent {
     this.setState({ offsetLeft: -(columnWidth + columnGutter) * activeImage });
   }
 
+  updateActiveImage(index) {
+    const { activeOnHover } = this.props;
+    if (!activeOnHover) {
+      this.setState({ activeImage: index });
+      return;
+    }
+    const { isTransitioning } = this.state;
+    if (isTransitioning) return;
+    this.setState({ activeImage: index, isTransitioning: true }, () => {
+      this.transition = setTimeout(() => {
+        this.setState({ isTransitioning: false });
+        console.log('stop transition');
+      }, 1000);
+    });
+  }
+
   componentDidMount() {
     this.calculateActiveWidth(() => {
       this.setState({ loading: false });
       this.calculateOffset();
     });
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.transition);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -78,12 +101,12 @@ class GallerySlider extends React.PureComponent {
     const swipeEnd = event.pageX;
 
     if (swipeEnd - this.swipeStart > SWIPER_MIN_DISTANCE) {
-      if (activeImage > 0) this.setState({ activeImage: activeImage - 1 }); // Right
+      if (activeImage > 0) this.updateActiveImage(activeImage - 1); // Right
     } else if (swipeEnd - this.swipeStart < -SWIPER_MIN_DISTANCE) {
-      if (activeImage < images.length - 1) this.setState({ activeImage: activeImage + 1 }); // Left
+      if (activeImage < images.length - 1) this.updateActiveImage(activeImage + 1); // Left
     } else {
       const imageId = parseInt(event?.target?.id); // Click
-      if (imageId >= 0) this.setState({ activeImage: imageId });
+      if (imageId >= 0) this.updateActiveImage(imageId);
     }
 
     this.swipeStart = null;
@@ -114,10 +137,12 @@ class GallerySlider extends React.PureComponent {
   }
 
   getImages(image, index) {
+    const { activeOnHover } = this.props;
     const { activeImage } = this.state;
     const isActive = activeImage === index;
     return (
       <div
+        onMouseOver={activeOnHover ? () => this.updateActiveImage(index) : null}
         className={classNames(styles.galleryImage)}
         style={this.getImagesStyles({
           src: image,
@@ -130,7 +155,7 @@ class GallerySlider extends React.PureComponent {
   }
 
   getSideColumns(image, isFirstImage) {
-    const { sideColumns, columnWidth } = this.props;
+    const { sideColumns } = this.props;
 
     const getBgOffset = (index) => {
       let offset = (50 / sideColumns) * index;
@@ -175,7 +200,7 @@ class GallerySlider extends React.PureComponent {
           {hasMoreThanOneImage && (
             <div
               className={classNames(styles.navigationButton)}
-              onClick={() => this.setState({ activeImage: activeImage - 1 })}
+              onClick={() => this.updateActiveImage(activeImage - 1)}
               disabled={activeImage === 0}
             />
           )}
@@ -198,7 +223,7 @@ class GallerySlider extends React.PureComponent {
             <div
               className={classNames(styles.navigationButton)}
               style={{ marginLeft: 16 }}
-              onClick={() => this.setState({ activeImage: activeImage + 1 })}
+              onClick={() => this.updateActiveImage(activeImage + 1)}
               disabled={activeImage === images.length - 1}
             />
           )}
@@ -215,7 +240,8 @@ GallerySlider.defaultProps = {
   columnGutter: 20,
   columnWidth: 75,
   sideColumns: 2,
-  containImage: 'off'
+  containImage: 'off',
+  activeOnHover: false
 };
 
 GallerySlider.CONTAIN = 'contain';
