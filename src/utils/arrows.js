@@ -12,8 +12,8 @@ export const ArrowLeft = ({ width = 16, height = 16 }) => {
         d='m6.5 5.5 3 3-3 3'
         stroke='#050709'
         fill='none'
-        fill-rule='evenodd'
-        stroke-linecap='round'
+        fillRule='evenodd'
+        strokeLinecap='round'
       />
     </svg>
   );
@@ -26,8 +26,8 @@ export const ArrowRight = ({ width = 16, height = 16 }) => {
         d='m6.5 5.5 3 3-3 3'
         stroke='#050709'
         fill='none'
-        fill-rule='evenodd'
-        stroke-linecap='round'
+        fillRule='evenodd'
+        strokeLinecap='round'
       />
     </svg>
   );

@@ -9,6 +9,7 @@ const SWIPER_MIN_DISTANCE = 50;
 class GallerySlider extends React.PureComponent {
   swipeStart = 0;
   transition = null;
+  loader = null;
 
   constructor(props, context) {
     super(props, context);
@@ -56,19 +57,30 @@ class GallerySlider extends React.PureComponent {
     this.setState({ activeImage: index, isTransitioning: true }, () => {
       this.transition = setTimeout(() => {
         this.setState({ isTransitioning: false });
-        console.log('stop transition');
       }, 1000);
     });
   }
 
   componentDidMount() {
-    this.calculateActiveWidth(() => {
+    const { sideColumns, initialImage } = this.props;
+    this.loader = () => {
       this.setState({ loading: false });
+    };
+    this.imagesContainerRef.current.children[sideColumns + initialImage].addEventListener(
+      'webkitTransitionEnd',
+      this.loader
+    );
+    this.calculateActiveWidth(() => {
       this.calculateOffset();
     });
   }
 
   componentWillUnmount() {
+    const { sideColumns, initialImage } = this.props;
+    this.imagesContainerRef.current.children[sideColumns + initialImage].removeEventListener(
+      'webkitTransitionEnd',
+      this.loader
+    );
     clearTimeout(this.transition);
   }
 
@@ -170,6 +182,7 @@ class GallerySlider extends React.PureComponent {
           isActive: false,
           bgOffset: getBgOffset(index)
         })}
+        key={index * sideColumns}
       />
     ));
   }
@@ -197,8 +210,12 @@ class GallerySlider extends React.PureComponent {
     if (images.length === 0) return null;
     return (
       <>
-        {loading ?? loaderElement}
         <div className={classNames(styles.gallerySlider, className)}>
+          {loading && (
+            <div className={styles.loaderContainer}>
+              {loaderElement ?? <div className={styles.loader}>Loading...</div>}
+            </div>
+          )}
           <div
             className={classNames(styles.galleryWrapper, loading && styles.hidden)}
             style={{ height: `${height}px` }}>

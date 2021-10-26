@@ -26,3 +26,4 @@ npm i @judsirera/slider-gallery
 | `containImage`  | `String`              | Whether the gallery should render the image with full height. Possible values: `"contain"`, `"contain_active"`, `"off"` | `"off"`                                                        |
 | `activeOnHover` | `Boolean`             | Set to true if you want to active an image on hover                                                                     | `false`                                                        |
 | `navigation`    | `Boolean` or `Object` | Sets the properties for navigation. Accepts `true`, `false` or `{ className: '', showWhenOneImageOrLess: ''}`           | `true`. When there's less than one image, navigation is hidden |
+| `loaderElement` | `node`                | The node element to render when loading at start                                                                        | `null`                                                         |
