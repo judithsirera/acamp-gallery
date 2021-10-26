@@ -25,7 +25,7 @@ class GallerySlider extends React.PureComponent {
     this.handleStartSwipe = this.handleStartSwipe.bind(this);
   }
 
-  calculateActiveWidth(callback) {
+  calculateActiveWidth(callback = () => {}) {
     const { columnGutter, columnWidth, sideColumns } = this.props;
     const imagesContainerWidth = this.imagesContainerRef.current.clientWidth;
     const spaceTakenBySideImages = columnWidth * (sideColumns * 2);
@@ -36,9 +36,8 @@ class GallerySlider extends React.PureComponent {
 
   calculateOffset() {
     const { activeImage } = this.state;
-    const { columnWidth, columnGutter, sideColumns } = this.props;
-    const constantOffset = (columnWidth + columnGutter) * sideColumns;
-    this.setState({ offsetLeft: constantOffset - (columnWidth + columnGutter) * activeImage });
+    const { columnWidth, columnGutter } = this.props;
+    this.setState({ offsetLeft: -(columnWidth + columnGutter) * activeImage });
   }
 
   componentDidMount() {
@@ -48,9 +47,17 @@ class GallerySlider extends React.PureComponent {
     });
   }
 
-  componentDidUpdate(_prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     const { activeImage } = this.state;
-    if (prevState.activeImage != activeImage) {
+    if (prevProps !== this.props) {
+      if (prevProps.images.length !== this.props.images.length) {
+        this.forceUpdate();
+      } else {
+        this.calculateActiveWidth(() => {
+          this.calculateOffset();
+        });
+      }
+    } else if (prevState.activeImage != activeImage) {
       this.calculateOffset();
     }
   }
@@ -82,10 +89,11 @@ class GallerySlider extends React.PureComponent {
     this.swipeStart = null;
   }
 
-  getImagesStyles({ src, width, bgOffset }) {
-    const { columnGutter } = this.props;
-    const { offsetLeft } = this.state;
+  getImagesStyles({ src, isActive, bgOffset }) {
+    const { columnGutter, containImage, columnWidth } = this.props;
+    const { offsetLeft, activeWidth } = this.state;
 
+    const width = isActive ? activeWidth : columnWidth;
     const style = {
       backgroundImage: `url(${src})`,
       minWidth: `${width}px`,
@@ -96,27 +104,56 @@ class GallerySlider extends React.PureComponent {
     };
 
     if (bgOffset) style.backgroundPosition = bgOffset;
+    if (containImage !== GallerySlider.CONTAIN_OFF) {
+      if (containImage === GallerySlider.CONTAIN) style.backgroundSize = 'contain';
+      if (containImage === GallerySlider.CONTAIN_ACTIVE_IMAGE && isActive)
+        style.backgroundSize = 'contain';
+    }
 
     return style;
   }
 
   getImages(image, index) {
-    const { activeWidth, activeImage } = this.state;
-    const { columnWidth } = this.props;
+    const { activeImage } = this.state;
     const isActive = activeImage === index;
     return (
       <div
         className={classNames(styles.galleryImage)}
-        style={this.getImagesStyles({ src: image, width: isActive ? activeWidth : columnWidth })}
+        style={this.getImagesStyles({
+          src: image,
+          isActive
+        })}
         key={index}
         id={index}
       />
     );
   }
 
+  getSideColumns(image, isFirstImage) {
+    const { sideColumns, columnWidth } = this.props;
+
+    const getBgOffset = (index) => {
+      let offset = (50 / sideColumns) * index;
+      if (!isFirstImage) offset += 50;
+
+      return `${offset}%`;
+    };
+
+    return Array.from(Array(sideColumns), (_, index) => (
+      <div
+        className={classNames(styles.galleryImage, styles.disabled)}
+        style={this.getImagesStyles({
+          src: image,
+          isActive: false,
+          bgOffset: getBgOffset(index)
+        })}
+      />
+    ));
+  }
+
   render() {
     const { loading, activeImage } = this.state;
-    const { images, loaderElement, height, columnWidth } = this.props;
+    const { images, loaderElement, height, columnWidth, className } = this.props;
 
     const swipeHandlers = {
       onPointerDown: this.handleStartSwipe,
@@ -133,7 +170,7 @@ class GallerySlider extends React.PureComponent {
       <>
         {loading ?? loaderElement}
         <div
-          className={classNames(styles.galleryWrapper, loading && styles.hidden)}
+          className={classNames(className, styles.galleryWrapper, loading && styles.hidden)}
           style={{ height: `${height}px` }}>
           {hasMoreThanOneImage && (
             <div
@@ -149,23 +186,13 @@ class GallerySlider extends React.PureComponent {
               marginLeft: hasMoreThanOneImage ? 16 : null
             }}
             {...swipeHandlers}>
-            <div
-              className={classNames(styles.galleryImage, styles.disabled)}
-              style={this.getImagesStyles({ src: firstImage, width: columnWidth, bgOffset: '0%' })}
-            />
-            <div
-              className={classNames(styles.galleryImage, styles.disabled)}
-              style={this.getImagesStyles({ src: firstImage, width: columnWidth, bgOffset: '25%' })}
-            />
+            {this.getSideColumns(firstImage)}
             {images.map(this.getImages)}
             <div
               className={classNames(styles.galleryImage, styles.disabled)}
               style={this.getImagesStyles({ src: lastImage, width: columnWidth, bgOffset: '75%' })}
             />
-            <div
-              className={classNames(styles.galleryImage, styles.disabled)}
-              style={this.getImagesStyles({ src: lastImage, width: columnWidth, bgOffset: '100%' })}
-            />
+            {this.getSideColumns(lastImage, true)}
           </div>
           {hasMoreThanOneImage && (
             <div
@@ -187,7 +214,12 @@ GallerySlider.defaultProps = {
   images: [],
   columnGutter: 20,
   columnWidth: 75,
-  sideColumns: 2
+  sideColumns: 2,
+  containImage: 'off'
 };
+
+GallerySlider.CONTAIN = 'contain';
+GallerySlider.CONTAIN_ACTIVE_IMAGE = 'contain_active';
+GallerySlider.CONTAIN_OFF = 'off';
 
 export default GallerySlider;
