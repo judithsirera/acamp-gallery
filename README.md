@@ -26,3 +26,26 @@ npm i @judsirera/acamp-gallery
 | `activeOnHover` | `Boolean`             | Set to true if you want to active an image on hover                                                                     | `false`                                                        |
 | `navigation`    | `Boolean` or `Object` | Sets the properties for navigation. Accepts `true`, `false` or `{ className: '', showWhenOneImageOrLess: ''}`           | `true`. When there's less than one image, navigation is hidden |
 | `loaderElement` | `node`                | The node element to render when loading at start                                                                        | `null`                                                         |
+
+## Acamp Gallery Component
+
+```js
+<AcampGallery
+    images={[]}
+    height={460}
+    columnGutter={20}
+    columnWidth={75}
+    sideColumns={2}
+    containImage={AcampGallery.CONTAIN_OFF}
+    activeOnHover={false}
+    navigation={{
+        className: 'your-navigation-classname'
+        showWhenOneImageOrLess: false
+    }}
+    className='your-gallery-wrapper-classname'
+    />
+```
+
+## Credits
+
+Designed by [Marija Vitasovic](https://marija.lynxdev.io/) and implemented by [Judith Sirera](http://judithsirera.com/) while working at [Acamp](https://www.acamp.com/sv)

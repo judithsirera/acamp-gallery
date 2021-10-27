@@ -1,5 +1,5 @@
 import './App.css';
-import GallerySlider from '@judsirera/acamp-gallery';
+import AcampGallery from '@judsirera/acamp-gallery';
 import { useState } from 'react';
 import { getImage } from './utils';
 
@@ -28,9 +28,9 @@ const DropdownField = ({ label, opts, selected, ...dropdownProps }) => {
 };
 
 const CONTAIN_OPTIONS = [
-  GallerySlider.CONTAIN,
-  GallerySlider.CONTAIN_ACTIVE_IMAGE,
-  GallerySlider.CONTAIN_OFF
+  AcampGallery.CONTAIN,
+  AcampGallery.CONTAIN_ACTIVE_IMAGE,
+  AcampGallery.CONTAIN_OFF
 ];
 
 const App = () => {
@@ -39,7 +39,7 @@ const App = () => {
   const [columnGutter, setColumnGutter] = useState(20);
   const [columnWidth, setColumnWidth] = useState(75);
   const [height, setHeight] = useState(460);
-  const [containImage, setContainImage] = useState(GallerySlider.CONTAIN_OFF);
+  const [containImage, setContainImage] = useState(AcampGallery.CONTAIN_OFF);
   const [activeOnHover, setActiveOnHover] = useState(false);
   const [navigation, setNavigation] = useState(true);
 
@@ -67,7 +67,7 @@ const App = () => {
           </a>
         </p>
       </div>
-      <GallerySlider
+      <AcampGallery
         images={Array.from(Array(images), (_, index) => getImage(index))}
         height={height}
         columnGutter={columnGutter}
