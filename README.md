@@ -1,11 +1,10 @@
-# Slider-gallery
+# Acamp Gallery
 
-A new gallery for your pages!
-Made with love from [Acamp](https://acamp.com/)
+The gallery used at [Acamp](https://acamp.com/), now available for your pages!
 
-![Demo](/assets/example.png)
+![Demo](/assets/example.gif)
 
-Try out a demo [here](https://judithsirera.github.io/slider-gallery/)
+Try out a demo [here](https://judithsirera.github.io/acamp-gallery/)
 
 ## Install
 

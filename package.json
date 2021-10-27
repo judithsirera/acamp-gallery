@@ -1,7 +1,7 @@
 {
-  "name": "@judsirera/slider-gallery",
-  "version": "2.0.1",
-  "description": "An interactive slider gallery",
+  "name": "@judsirera/acamp-gallery",
+  "version": "1.0.0",
+  "description": "An interactive slider gallery made with React",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/judithsirera/slider-gallery.git"
+    "url": "git+https://github.com/judithsirera/acamp-gallery.git"
   },
   "keywords": [
     "gallery",
@@ -24,9 +24,9 @@
   "author": "Judith Sirera i Pulido",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/judithsirera/slider-gallery/issues"
+    "url": "https://github.com/judithsirera/acamp-gallery/issues"
   },
-  "homepage": "https://github.com/judithsirera/slider-gallery#readme",
+  "homepage": "https://github.com/judithsirera/acamp-gallery#readme",
   "directories": {
     "test": "test"
   },

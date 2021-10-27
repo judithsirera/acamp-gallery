@@ -1,6 +1,35 @@
 .gallerySlider {
   padding-left: 32px;
   padding-right: 32px;
+  position: relative;
+
+  .loaderContainer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    .loader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      animation: bgAnimation 3s infinite;
+
+      @keyframes bgAnimation {
+        0% {
+          background-color: #e2e2e2;
+        }
+        50% {
+          background-color: #f5f5f5;
+        }
+        100% {
+          background-color: #f5f5f5;
+        }
+      }
+    }
+  }
 
   .galleryWrapper {
     position: relative;

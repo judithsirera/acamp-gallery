@@ -41,6 +41,8 @@ class GallerySlider extends _react.default.PureComponent {
 
     _defineProperty(this, "transition", null);
 
+    _defineProperty(this, "loader", null);
+
     this.imagesContainerRef = /*#__PURE__*/(0, _react.createRef)(null);
     this.state = {
       loading: true,
@@ -111,21 +113,34 @@ class GallerySlider extends _react.default.PureComponent {
         this.setState({
           isTransitioning: false
         });
-        console.log('stop transition');
       }, 1000);
     });
   }
 
   componentDidMount() {
-    this.calculateActiveWidth(() => {
+    const {
+      sideColumns,
+      initialImage
+    } = this.props;
+
+    this.loader = () => {
       this.setState({
         loading: false
       });
+    };
+
+    this.imagesContainerRef.current.children[sideColumns + initialImage].addEventListener('webkitTransitionEnd', this.loader);
+    this.calculateActiveWidth(() => {
       this.calculateOffset();
     });
   }
 
   componentWillUnmount() {
+    const {
+      sideColumns,
+      initialImage
+    } = this.props;
+    this.imagesContainerRef.current.children[sideColumns + initialImage].removeEventListener('webkitTransitionEnd', this.loader);
     clearTimeout(this.transition);
   }
 
@@ -246,7 +261,8 @@ class GallerySlider extends _react.default.PureComponent {
         src: image,
         isActive: false,
         bgOffset: getBgOffset(index)
-      })
+      }),
+      key: index * sideColumns
     }));
   }
 
@@ -279,9 +295,13 @@ class GallerySlider extends _react.default.PureComponent {
     }
 
     if (images.length === 0) return null;
-    return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, loading !== null && loading !== void 0 ? loading : loaderElement, /*#__PURE__*/_react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(_indexModule.default.gallerySlider, className)
-    }, /*#__PURE__*/_react.default.createElement("div", {
+    }, loading && /*#__PURE__*/_react.default.createElement("div", {
+      className: _indexModule.default.loaderContainer
+    }, loaderElement !== null && loaderElement !== void 0 ? loaderElement : /*#__PURE__*/_react.default.createElement("div", {
+      className: _indexModule.default.loader
+    }, "Loading...")), /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(_indexModule.default.galleryWrapper, loading && _indexModule.default.hidden),
       style: {
         height: "".concat(height, "px")
