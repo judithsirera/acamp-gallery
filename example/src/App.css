@@ -5,12 +5,12 @@
 }
 
 a {
-  color: #f29c33;
+  color: #f6bf00;
   text-decoration: none;
 }
 
 a:active {
-  color: #f29c33;
+  color: #f6bf00;
 }
 
 a:hover {
@@ -25,6 +25,24 @@ header {
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.credits {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.credits > p {
+  color: #707070;
+  padding: 0px 32px;
+  margin: 0px;
+  border-right: 1px solid #707070;
+}
+
+.credits > p:last-child {
+  border-right: none;
 }
 
 .input-container {

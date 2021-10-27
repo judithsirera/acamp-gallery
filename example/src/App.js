@@ -1,5 +1,5 @@
 import './App.css';
-import GallerySlider from '@judsirera/slider-gallery';
+import GallerySlider from '@judsirera/acamp-gallery';
 import { useState } from 'react';
 import { getImage } from './utils';
 
@@ -45,18 +45,28 @@ const App = () => {
 
   return (
     <div className='app'>
-      <h1>Slider Gallery</h1>
-      <h3>A new gallery for your pages!</h3>
-      <p>
-        By{' '}
-        <a href='http://judithsirera.com/' target='_blank' rel='noreferrer'>
-          Judith Sirera
-        </a>{' '}
-        at{' '}
-        <a href='https://acamp.com/' target='_blank' rel='noreferrer'>
-          Acamp
-        </a>
-      </p>
+      <h1>Acamp's Gallery</h1>
+      <h3>Our gallery available for your pages!</h3>
+      <div className='credits'>
+        <p>
+          Designed by{' '}
+          <a href='https://marija.lynxdev.io/' target='_blank' rel='noreferrer'>
+            Marija Vitasovic
+          </a>
+        </p>
+        <p>
+          Implemented by{' '}
+          <a href='http://judithsirera.com/' target='_blank' rel='noreferrer'>
+            Judith Sirera
+          </a>
+        </p>
+        <p>
+          With Love, from{' '}
+          <a href='https://acamp.com/' target='_blank' rel='noreferrer'>
+            Acamp
+          </a>
+        </p>
+      </div>
       <GallerySlider
         images={Array.from(Array(images), (_, index) => getImage(index))}
         height={height}

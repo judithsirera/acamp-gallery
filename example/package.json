@@ -1,13 +1,15 @@
 {
-  "name": "Slider Gallery",
+  "name": "Acamp Gallery Demo",
   "version": "0.1.0",
   "private": true,
   "homepage": ".",
   "dependencies": {
-    "@judsirera/slider-gallery": "^2.0.1",
+    "@judsirera/acamp-gallery": "^1.0.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "i": "^0.3.7",
+    "npm": "^8.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
