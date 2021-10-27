@@ -9,7 +9,7 @@ Try out a demo [here](https://judithsirera.github.io/acamp-gallery/)
 ## Install
 
 ```js
-npm i @judsirera/slider-gallery
+npm i @judsirera/acamp-gallery
 ```
 
 ## Props
