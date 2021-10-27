@@ -31,19 +31,19 @@ npm i @judsirera/acamp-gallery
 
 ```js
 <AcampGallery
-    images={[]}
-    height={460}
-    columnGutter={20}
-    columnWidth={75}
-    sideColumns={2}
-    containImage={AcampGallery.CONTAIN_OFF}
-    activeOnHover={false}
-    navigation={{
-        className: 'your-navigation-classname'
-        showWhenOneImageOrLess: false
-    }}
-    className='your-gallery-wrapper-classname'
-    />
+  images={[]}
+  height={460}
+  columnGutter={20}
+  columnWidth={75}
+  sideColumns={2}
+  containImage={AcampGallery.CONTAIN_OFF}
+  activeOnHover={false}
+  navigation={{
+    className: 'your-navigation-classname',
+    showWhenOneImageOrLess: false
+  }}
+  className='your-gallery-wrapper-classname'
+/>
 ```
 
 ## Credits
