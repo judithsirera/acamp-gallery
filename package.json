@@ -1,6 +1,6 @@
 {
   "name": "@judsirera/acamp-gallery",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "An interactive slider gallery made with React",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -19,7 +19,10 @@
   },
   "keywords": [
     "gallery",
-    "slider"
+    "slider",
+    "react",
+    "component",
+    "acamp"
   ],
   "author": "Judith Sirera i Pulido",
   "license": "MIT",
@@ -35,15 +38,12 @@
     "react-dom": "^17.0.2",
     "sass": "^1.43.3"
   },
-  "dependencies": {
-    "@babel/polyfill": "^7.12.1",
-    "@babel/preset-react": "^7.14.5",
-    "classnames": "^2.3.1",
-    "prop-types": "^15.7.2"
-  },
   "devDependencies": {
     "@babel/cli": "^7.15.7",
     "@babel/core": "^7.15.8",
-    "@babel/preset-env": "^7.15.8"
+    "@babel/preset-env": "^7.15.8",
+    "@babel/preset-react": "^7.14.5",
+    "classnames": "^2.3.1",
+    "prop-types": "^15.7.2"
   }
 }
