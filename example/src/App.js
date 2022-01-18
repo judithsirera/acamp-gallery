@@ -84,6 +84,7 @@ const App = () => {
         containImage={containImage}
         activeOnHover={activeOnHover}
         navigation={navigation}
+        onMainImageClick={(id) => console.log('main image clicked', id)}
         className='gallery-slider'
       />
       <div className='input-container'>

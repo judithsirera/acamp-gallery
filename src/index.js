@@ -92,17 +92,18 @@ class GallerySlider extends React.PureComponent {
     const { images } = this.props;
     const { activeImage } = this.state;
     event.stopPropagation();
-
     event.target.setPointerCapture(event.pointerId);
     const swipeEnd = event.pageX;
-
     if (swipeEnd - this.swipeStart > SWIPER_MIN_DISTANCE) {
       if (activeImage > 0) this.updateActiveImage(activeImage - 1); // Right
     } else if (swipeEnd - this.swipeStart < -SWIPER_MIN_DISTANCE) {
       if (activeImage < images.length - 1) this.updateActiveImage(activeImage + 1); // Left
     } else {
       const imageId = parseInt(event?.target?.id); // Click
-      if (imageId >= 0) this.updateActiveImage(imageId);
+      if (imageId >= 0) {
+        if (this.props.onMainImageClick && imageId == activeImage.toString()) this.props.onMainImageClick(imageId)
+        else this.updateActiveImage(imageId);
+      }
     }
 
     this.swipeStart = null;
@@ -222,7 +223,8 @@ class GallerySlider extends React.PureComponent {
               style={{
                 marginLeft: showNavigation ? 16 : null
               }}
-              {...swipeHandlers}>
+              {...swipeHandlers}
+            >
               {this.getSideColumns(firstImage)}
               {images.map(this.getImages)}
               <div
@@ -289,7 +291,8 @@ GallerySlider.propTypes = {
       className: PropTypes.string,
       showWhenOneImageOrLess: PropTypes.bool
     })
-  ])
+  ]),
+  onMainImageClick: PropTypes.func
 };
 
 export default GallerySlider;
